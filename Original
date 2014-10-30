@@ -1,0 +1,559 @@
+import java.util.Scanner;
+import java.util.Random;
+
+public class UnitCircle {
+	static Scanner in = new Scanner(System.in);
+	static Random generate = new Random();
+
+	static String[] points = { "0", "√3/2", "√2/2", "1/2", "1", "-1", "-1/2",
+			"-√2/2", "-√3/2" };  // array of unit circle coordinates
+
+	static int[] angles = { 0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225,
+			240, 270, 300, 315, 330, 360 };  // array of unit circle angles (in degrees)
+
+	static int[] pi_num = { 1, 2, 3, 4, 5, 7, 11 };  // array of unit circle numerators
+	
+	static int[] pi_den = { 1, 2, 3, 4, 6 };  // array of unit circle denominators
+	
+	final static String ROOT = "\u221A";
+	final static String PI = "\u03C0";
+	final static String DEGREE = "\u00b0";
+	
+	static int correct = 0;
+	static int incorrect = 0;
+	
+	/**
+	 * Main Method 
+	 * @param args
+	 */
+	public static void main(String[] args) {	
+		System.out
+				.println("Welcome to Unit Circle!\n\n"
+						+ "This program will test your knowledge of\n"
+						+ "the Unit Circle through a series of simple tests.\n" 
+						+ "Good luck!");
+		header();
+		game();
+	}
+	
+	/**
+	 * A method to create the header
+	 */
+	
+	public static void header() {
+		int headerLength = 8;
+		for (int i = 0; i < headerLength; i++) {
+			if (i < headerLength - 1) {
+				System.out.print("===---");
+			} else {
+				System.out.println("====");
+			}
+		}
+	}
+	
+	/**
+	 * A method to call the questions at random
+	 */
+	
+	public static void game() {
+		int count = 1;
+		int i;
+		int length = 19;
+		int r5;
+		
+		for (i = 0; i <= length; i++) { 
+			r5 = generate.nextInt( 2 );
+			if (r5 == 0) {
+				System.out.print("(" + count + ") ");
+				pointToDegree();
+				count++;
+			}
+			else {
+				System.out.print("(" + count + ") ");
+				radianToDegree();
+				count++;
+			}
+		}
+		header();
+		System.out.printf("\nYou answered %d questions correctly and %d questions incorrectly.\n", correct, incorrect);
+	}
+	
+	/**
+	 * A method that generates a random pair of points on the unit circle,
+	 * asks the user to find the the value of theta in degrees, takes user input,
+	 * and compares the user input to the actual value; pointToDegree() will
+	 * then inform the user if the were right or wrong, and print the correct
+	 * answer 
+	 */
+	
+	public static void pointToDegree() {
+		int r1;
+		int r2;
+		int answer;
+		int response;
+				
+		r1 = generate.nextInt( points.length );
+		r2 = second(r1);
+		if (r2 == 50)
+		{
+			System.out.println("Error.");
+		}
+		else
+		{
+			answer = answer(r1, r2);
+			if (answer == 50) {
+				System.out.println("Error.");
+			}
+			else {
+			System.out.printf("Please input the value of theta in degrees for\n"
+							+ "the following pair of points: (%s, %s)\n",
+								points[r1], points[r2]);
+			response = in.nextInt();
+			if (response == answer) {
+				System.out.printf("%d%s is correct!\n\n", answer, DEGREE);
+				correct++;
+			}
+			else {
+				System.out.printf("Sorry, the correct answer is %d%s\n\n", answer, DEGREE);
+				incorrect++;
+				}
+			}
+		}
+	}
+	
+	public boolean hasNextInt() {
+		if (hasNextInt() == true) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	/**
+	 * A method that generates a random value of theta in radians and asks
+	 * the user to provide the value of theta in degrees
+	 */
+	
+	public static void radianToDegree() {
+		int r3;
+		int r4;
+		int answer2;
+		int response;
+				
+		r3 = generate.nextInt( pi_num.length );
+		r4 = third(r3);
+		answer2 = answer2(r3, r4);
+		
+		// Unusual exception
+		if (r4 == 50) {
+			System.out.println("Error.");
+		}
+						
+		// If the numerator = 1(Pi), and the denominator = 1 -- do not print "1"
+		else if (r3 == 0 && r4 == 0) {
+			
+			System.out.printf("Input the value of %s in degrees.\n", PI);
+			response = in.nextInt();
+			
+			if (response == answer2) {
+				System.out.printf("Correct! %d%s is equal to %s\n\n", answer2, DEGREE, PI);
+				correct++;
+			}
+			else {
+				System.out.printf("Sorry, %s is equal to %d%s\n\n", PI, answer2, DEGREE);
+				incorrect++;
+			}
+		}
+		
+		// If the numerator = 1(Pi) -- do not print "1"
+		else if (r3 == 0 && r4 != 0) {
+			System.out.printf("Input the value of %s/%d in degrees.\n", PI, pi_den[r4]);
+			response = in.nextInt();
+			
+			if (response == answer2) {
+				System.out.printf("Correct! %d%s is equal to %s/%d\n\n", answer2, DEGREE, PI, pi_den[r4]);
+				correct++;
+			}
+			else {
+				System.out.printf("Sorry, %s/%d is equal to %d%s\n\n", PI, pi_den[r4], answer2, DEGREE);
+				incorrect++;
+			}
+		}
+		
+		// If the denominator = 1
+		else if (r3 != 0 && r4 == 0) {
+			System.out.printf("Input the value of %d%s in degrees.\n", pi_num[r3], PI);
+			response = in.nextInt();
+			
+			if (response == answer2) {
+				System.out.printf("Correct! %d%s is equal to %d%s\n\n", answer2, DEGREE, pi_num[r3], PI);
+				correct++;
+			}
+			else {
+				System.out.printf("Sorry, %d%s is equal to %d%s\n\n", pi_num[r3], PI, answer2, DEGREE);
+				incorrect++;
+			}
+		}
+		
+		// If the numerator is any other number defined in the array pi_num
+		else {
+			System.out.printf("Input the value of %d%s/%d in degrees.\n", pi_num[r3], PI, pi_den[r4]);
+			response = in.nextInt();
+			
+			if (response == answer2) {
+				System.out.printf("Correct! %d%s is equal to %d%s/%d\n\n", answer2, DEGREE, pi_num[r3], PI, pi_den[r4]);
+				correct++;
+			}
+			else {
+				System.out.printf("Sorry, %d%s/%d is equal to %d%s\n\n", pi_num[r3], PI, pi_den[r4], answer2, DEGREE);
+				incorrect++;
+			}
+		}
+		
+	}
+	
+	/**
+	 * A method to return possible y values (r2) for the input x value (r1)
+	 * 
+	 * @param r1
+	 * @return r2
+	 */
+	
+	public static int second(int r1) {
+		int send;
+		int r2;
+		
+		// If r1 == 0 | x = 0; y = 1 or y = -1 
+		if (r1 == 0) {
+			int[] a = { 4, 5 };
+			send = generate.nextInt( a.length );
+			r2 = a[send];
+			return r2;
+		}
+		
+		// If r1 == 1 or if r1 == 8 | x = [3]/2 or x -[3]/2; y = 1/2 or y = -1/2
+		else if (r1 == 1 || r1 == 8) {
+			int[] b = { 3, 6 };
+			send = generate.nextInt( b.length );
+			r2 = b[send];
+			return r2;
+		}
+		
+		// If r1 == 2 or if r1 == 7 | x = [2]/2 or x = -[2]/2; y = [2]/2 or y = -[2]/2
+		else if (r1 == 2 || r1 == 7) {
+			int[] c = { 2, 7 };
+			send = generate.nextInt( c.length );
+			r2 = c[send];
+			return r2;
+		}
+		
+		// If r1 == 3 or if  r1 == 6 | x = 1/2 or x = -1/2; y = [3]/2 or y = -[3]/2
+		else if (r1 == 3 || r1 == 6) {
+			int[] d = { 1, 8 };
+			send = generate.nextInt( d.length );
+			r2 = d[send];
+			return r2;
+		}
+		
+		// If r1 == 4 or if r1 == 5 | x = 1 or x = -1; y = 0 
+		else if (r1 == 4 || r1 == 5) {
+			r2 = 0;
+			return r2;
+		}
+		
+		// Unusual exception
+		else {
+			r2 = 50;
+			return r2;
+		}
+	}
+	
+	/**
+	 * A method to calculate a random denominator given a random numerator
+	 * 
+	 * @param r3
+	 * @return
+	 */
+	public static int third(int r3) {
+		int r4;
+		int send;
+		
+		// If the numerator = 2(Pi)
+		if (r3 == 1) {
+			int[] a = { 0, 2 };
+			send = generate.nextInt( a.length );
+			r4 = a[send];
+			return r4;
+		}
+		
+		// If the numerator = 3(Pi)
+		else if (r3 == 2) {
+			int[] a = { 1, 3 };
+			send = generate.nextInt( a.length );
+			r4 = a[send];
+			return r4;
+		}
+		
+		// If the numerator = 4(Pi)
+		else if (r3 == 3) {
+			r4 = 2;
+			return r4;
+		}
+		
+		// If the numerator = 5(Pi)
+		else if (r3 == 4) {
+			int[] b = { 2, 3, 4 };
+			send = generate.nextInt( b.length );
+			r4 = b[send];
+			return r4;
+		}
+		
+		// If the numerator = 7(Pi)
+		else if (r3 == 5) {
+			int[] c = { 3, 4 };
+			send = generate.nextInt( c.length );
+			r4 = c[send];
+			return r4;
+		}
+		
+		// If the numerator = 11(Pi)
+		else if (r3 == 6) {
+			r4 = 4;
+			return r4;
+		}
+		
+		// If the numerator = 1(Pi)
+		else if (r3 == 0) {
+			int[] d = { 0, 1, 2, 3, 4 };
+			send = generate.nextInt( d.length );
+			r4 = d[send];
+			return r4;
+		}
+		
+		// Unusual exception
+		else {
+			r4 = 50;
+			return r4;
+		}
+	}
+	
+	/**
+	 * A method to return value of theta in degrees for points (points[r1], points[r2])
+	 * 
+	 * @param r1
+	 * @param r2
+	 * @return ans - value of theta in degrees
+	 */
+	
+	public static int answer(int r1, int r2) {
+		int ans;
+		
+		// If x = 0, y = 1 || y = -1
+		if (r1 == 0) {
+			if (r2 == 4) {
+				ans = angles[4];
+				return ans;
+			}
+			else
+			{
+				ans = angles[12];
+				return ans;
+			}
+		}
+		
+		// If x = [3]/2, y = 1/2 || y = -1/2
+		else if (r1 == 1) {
+			if (r2 == 3) {
+				ans = angles[1];
+				return ans;
+			}
+			else {
+				ans = angles[15];
+				return ans;
+			}
+			
+		// If x = [2]/2, y = [2]/2 || y = -[2]/2	
+		} else if (r1 == 2) {
+			if (r2 == 2) {
+				ans = angles[2];
+				return ans;
+			}
+			else {
+				ans = angles[14];
+				return ans;
+			}
+		
+		// If x = 1/2, y = [3]/2 || y = -[3]/2
+		} else if (r1 == 3) {
+			if (r2 == 1) {
+				ans = angles[3];
+				return ans;
+			} 
+			else {
+				ans = angles[13];
+				return ans;
+			}
+			
+		// If x = 1, y = 0	
+		} else if (r1 == 4) {
+			ans = angles[16];
+			return ans;
+		
+		// If x = -1, y = 0
+		}
+		else if (r1 == 5) {
+			ans = angles[8];
+			return ans;
+		
+		// If x = -1/2, y = [3]/2 || y = -[3]/2
+		}
+		else if (r1 == 6) {
+			if (r2 == 1) {
+				ans = angles[5];
+				return ans;
+			}
+			else {
+				ans = angles[11];
+				return ans;
+			}
+		
+		// If x = -[2]/2, y = [2]/2 || y = -[2]/2 
+		}
+		else if (r1 == 7) {
+			if (r2 == 2) {
+				ans = angles[6];
+				return ans;
+			}
+			else {
+				ans = angles[10];
+				return ans;
+			}
+			
+		// If x = -[3]/2, y = 1/2 || y = -1/2
+		}
+		else if (r1 == 8) {
+			if (r2 == 3) {
+				ans = angles[7];
+				return ans;
+			}
+			else {
+				ans = angles[9];
+				return ans;
+			}
+		}
+		
+		// Unusual exception
+		else {
+			ans = 50;
+			return ans;
+		}
+	}
+	
+	/**
+	 * A method to return the value of theta in degrees of an angle value in radians
+	 * 
+	 * @param r3
+	 * @param r4
+	 * @return ans - value of theta in degrees
+	 */
+	public static int answer2(int r3, int r4) {
+		int ans2;
+		
+		// If the numerator is 2(Pi)
+		if (r3 == 1) {
+			if (r4 == 0) {
+				ans2 = angles[16];
+				return ans2;
+			}
+			else {
+				ans2 = angles[5];
+				return ans2;
+			}
+		}
+		
+		// If the numerator is 3(Pi)
+		else if (r3 == 2) {
+			if (r4 == 1) {
+				ans2 = angles[12];
+				return ans2;
+			}
+			else {
+				ans2 = angles[6];
+				return ans2;
+			}
+		}
+		
+		// If the numerator is 4(Pi)
+		else if (r3 == 3) {
+			ans2 = angles[11];
+			return ans2;
+		}
+		
+		// If the numerator is 5(Pi)
+		else if (r3 == 4) {
+			if (r4 == 2) {
+				ans2 = angles[13];
+				return ans2;
+			}
+			else if (r4 == 3) {
+				ans2 = angles[10];
+				return ans2;
+			}
+			else {
+				ans2 = angles[7];
+				return ans2;
+			}
+		}
+		
+		// If the numerator is 7(Pi)
+		else if (r3 == 5) {
+			if (r4 == 3) {
+				ans2 = angles[14];
+				return ans2;
+			}
+			else {
+				ans2 = angles[9];
+				return ans2;
+			}
+		}
+		
+		// If the numerator is 11(Pi)
+		else if (r3 == 6) {
+			ans2 = angles[15];
+			return ans2;
+		}
+		
+		//If the numerator is 1(Pi)
+		else if (r3 == 0) {
+			if (r4 == 0) {
+				ans2 = angles[8];
+				return ans2;
+			}
+			else if (r4 == 1) {
+				ans2 = angles[4];
+				return ans2;
+			}
+			else if (r4 == 2) {
+				ans2 = angles[3];
+				return ans2;
+			}
+			else if (r4 == 3) {
+				ans2 = angles[2];
+				return ans2;
+			}
+			else {
+				ans2 = angles[1];
+				return ans2;
+			}
+		}
+		
+		// Unusual exception
+		else {
+			ans2 = 50;
+			return ans2;
+		}
+	}
+}
+
+
